@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
+    public UnityEvent OnHealthChange;
+
     private float _health = 100f;
     private float _minHealht = 0f;
     private float _maxHealth = 100f;
     private float _valueHealth = 10f;
-    [SerializeField] private HealthBar _healthBar;
 
     public float Health => _health;
     public float MinHealth => _minHealht;
@@ -16,18 +18,12 @@ public class Player : MonoBehaviour
 
     public void IncreaseHealth()
     {
-        if (_health < _maxHealth && _health > _minHealht - 1)
-        {
-            _health += _valueHealth;
-            _healthBar.ChangeSlider();
-        }
+        _health = Mathf.Clamp(_health += _valueHealth, _minHealht, _maxHealth);
+        OnHealthChange.Invoke();
     }
     public void TakeDamage()
     {
-        if (_health > _minHealht && _health < _maxHealth + 1)
-        {
-            _health -= _valueHealth;
-            _healthBar.ChangeSlider();
-        }
+        _health = Mathf.Clamp(_health -= _valueHealth, _minHealht, _maxHealth);
+        OnHealthChange.Invoke();
     }
 }

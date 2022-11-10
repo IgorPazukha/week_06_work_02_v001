@@ -19,6 +19,7 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         _slider = GetComponent<Slider>();
+        _slider.value = _player.Health;
     }
 
     public void ChangeSlider()
